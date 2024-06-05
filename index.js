@@ -3,9 +3,8 @@ const express = require('express');
 const app = express();
 const port = 3000;
 
+// MySQL
 const sequelize = require('./config/database');
-const User = require('./models/User');
-const Product = require('./models/Product');
 
 // Middleware
 app.use(express.json())
@@ -21,33 +20,13 @@ sequelize.sync()
         console.log('Erreur lors de la synchronisation de la database:', err);
     });
 
-app.get('/users', async(req, res) => {
-    try {
-        const users = await User.findAll();
-        res.json(users);
-    } catch (error) {
-        console.error('Erreur lors de la récupération des utilisateurs :', error);
-        res.status(500).json({ message: 'Erreur lors de la récupération des utilisateurs' });
-    }
-});
+// Importer les routes
+const userRoutes = require('./routes/userRoutes');
+const productRoutes = require('./routes/productRoutes');
 
-app.post('/users', async (req, res) => {
-    console.log('Received body:', req.body); // Ajoutez ceci pour voir ce qui est reçu
-    try {
-        console.log('ok')
-        res.send("req")
-    }
-    catch (error) {
-        console.log('err')
-    }
-    /*try {
-        const user = await User.create(req.body);
-        res.status(201).json(user);
-    } catch (err) {
-        console.error('Error creating user:', err); // Ajoutez ceci pour voir les erreurs en détail
-        res.status(400).json({ message: err.message });
-    }*/
-});
+// Utiliser les routes
+app.use('/users', userRoutes);
+app.use('/products', productRoutes);
 
 
 app.listen(port, () => {
