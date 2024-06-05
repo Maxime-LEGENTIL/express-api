@@ -3,7 +3,19 @@ const app = express()
 const port = 3000
 
 app.get('/', (req, res) => {
-    res.send('Hello World!')
+    res.send('Route GET ' + req)
+})
+
+app.post('/', (req, res) => {
+    res.send('Route POST ' + req)
+})
+
+app.put('/', (req, res) => {
+    res.send('Route PUT ' + req)
+})
+
+app.delete('/', (req, res) => {
+    res.send('Route DELETE ' + req)
 })
 
 app.listen(port, () => {
